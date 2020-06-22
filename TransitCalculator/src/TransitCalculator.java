@@ -1,9 +1,14 @@
 package src;
+
+import java.util.Arrays;
+
+
 class TransitCalculator {
 
 	int numberOfRides;	
 	double numberOfDays;
 	double[] prices = {2.75, 33.00, 127.00};
+	String[] pricesNames = {"Pay per day", "7 day unlim", "30 day unlim"};
 
 
 	
@@ -37,13 +42,56 @@ class TransitCalculator {
 			numberOf7DayPasses = 5;			
 		}
 		double priceOfOneRide = numberOf7DayPasses * prices[1] / numberOfRides;
-		
-	return priceOfOneRide;
+		return priceOfOneRide;
 	}
+		
+	public double[] getRidePrice() {
+		
+		double[] priceList;
+		
+		priceList = new double[3];
+		
+		priceList[0] = prices[0];
+		priceList[1] = prices[2] / numberOfRides;
+		priceList[2] = unlimited7Price();
+		
+		System.out.println(priceList);
+		
+		return priceList;
+		
+	}
+		
+		
+	
+	public String bestChoice() {
+		double[] priceList = getRidePrice();
+		
+		for (int i = 0; i < 3; i++)   
+        {  
+            for (int j = i + 1; j < 3; j++)   
+            {  
+                if (priceList[i] > priceList[j])   
+                {  
+                    double temp = priceList[i];
+                    String tempo = pricesNames[i];
+                    priceList[i] = priceList[j];  
+                    pricesNames[i] = pricesNames[j];
+                    priceList[j] = temp; 
+                    pricesNames[j] = tempo;
+                }  
+            }  
+        }  
+       return "You should get " + pricesNames[0] + " for " + priceList[0] + " per ride.";  
+	}
+	
+
 	
 	
 	public static void main(String[] args){
-		TransitCalculator testPerson = new TransitCalculator(20, 19);
+		TransitCalculator testPerson = new TransitCalculator(5, 19);
 		System.out.println(testPerson.unlimited7Price());
+		System.out.println(Arrays.toString(testPerson.getRidePrice()));
+		System.out.println(testPerson.bestChoice());
+		
 	}
 }
