@@ -7,17 +7,20 @@ class TransitCalculator {
 
 	int numberOfRides;	
 	double numberOfDays;
-	double[] prices = {2.75, 33.00, 127.00};
+	double[] pricesNY = {2.75, 33.00, 127.00};
 	String[] pricesNames = {"Pay per day", "7 day unlim", "30 day unlim"};
-
+	double[] pricesV = {2.30, 27.00, 110.00};
+	String region;
 
 	
-	public TransitCalculator(int myRides, double myDays) {
+	public TransitCalculator(int myRides, double myDays, String myRegions) {
 		numberOfRides = myRides;
 		numberOfDays = myDays;
+		region = myRegions;
 	}
 	
 	public double unlimited7Price() {
+		double priceOfOneRide = 0;
 		int numberOf7DayPasses = 1;
 		double modula = numberOfDays % 7;
 		double divis = numberOfDays / 7;
@@ -41,7 +44,14 @@ class TransitCalculator {
 		}else if(modula == 0 && divis == 5){
 			numberOf7DayPasses = 5;			
 		}
-		double priceOfOneRide = numberOf7DayPasses * prices[1] / numberOfRides;
+		
+		if(region == "NY") {
+			priceOfOneRide = numberOf7DayPasses * pricesNY[1] / numberOfRides;
+		}else if(region == "V") {
+			priceOfOneRide = numberOf7DayPasses * pricesV[1] / numberOfRides;
+		}
+		
+		
 		return priceOfOneRide;
 	}
 		
@@ -51,8 +61,8 @@ class TransitCalculator {
 		
 		priceList = new double[3];
 		
-		priceList[0] = prices[0];
-		priceList[1] = prices[2] / numberOfRides;
+		priceList[0] = pricesNY[0];
+		priceList[1] = pricesNY[2] / numberOfRides;
 		priceList[2] = unlimited7Price();
 		
 		System.out.println(priceList);
@@ -81,17 +91,21 @@ class TransitCalculator {
                 }  
             }  
         }  
-       return "You should get " + pricesNames[0] + " for " + priceList[0] + " per ride.";  
+		if(region == "NY" || region == "V") {
+       return "You've selected "+ region + " region. " + "You should get " + pricesNames[0] + " for " + priceList[0] + " per ride.";
+       } else { return "Specified region doesnt exist";}  
 	}
 	
 
 	
 	
 	public static void main(String[] args){
-		TransitCalculator testPerson = new TransitCalculator(5, 19);
+		TransitCalculator testPerson = new TransitCalculator(40, 19, "V");
+		TransitCalculator testPerson2 = new TransitCalculator(69, 24, "NY");
 		System.out.println(testPerson.unlimited7Price());
 		System.out.println(Arrays.toString(testPerson.getRidePrice()));
 		System.out.println(testPerson.bestChoice());
+		System.out.println(testPerson2.bestChoice());
 		
 	}
 }
